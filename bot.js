@@ -7,10 +7,34 @@ client.on('ready', () => {
 });
 
 client.on('message', message => {
-  if (message.content === 'ping') {
-    message.reply('pong');
+  // kick everyone out of the weekly-seed-spoilers channel
+  if (message.content === '.new-week' && message.channel.name === 'developer-chat') {
+    handleNewWeek(message);
   }
+  
+  // handle ".done" messages - should include the time.
+  if (message.content.startsWith('.done') && message.channel.name === 'weekly-seed') {
+    handleDone(message);
+  }
+  // what else to handle?
+  // may need to create the spoiler channel...?
 });
+
+const handleNewWeek = (message) => {
+  const guild = message.guild;
+  const role = guild.roles.find(role => role.name === 'Weekly Seed Done');
+  for (const member of role.members.values()) {
+    member.removeRole(role);
+    console.log(`Removed ${member.user.username} from ${role.name}`);
+  }
+};
+
+const handleDone = (message) => {
+  const guild = message.guild;
+  const role = guild.roles.find(role => role.name === 'Weekly Seed Done');
+  message.member.addRole(role);
+  console.log(`Added ${message.member.user.username} to ${role.name}`);
+};
 
 client.login(process.env.BOT_TOKEN);
 
