@@ -23,10 +23,13 @@ client.on('message', message => {
 const handleNewWeek = (message) => {
   const guild = message.guild;
   const role = guild.roles.find(role => role.name === 'Weekly Seed Done');
+  let count = 0;
   for (const member of role.members.values()) {
     member.removeRole(role);
     console.log(`Removed ${member.user.username} from ${role.name}`);
+    ++count;
   }
+  message.replay(`Removed ${count} users from ${role.name}`);
 };
 
 const handleDone = (message) => {
@@ -37,4 +40,3 @@ const handleDone = (message) => {
 };
 
 client.login(process.env.BOT_TOKEN);
-
