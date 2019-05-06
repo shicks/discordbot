@@ -13,7 +13,7 @@ client.on('message', message => {
   }
   
   // handle ".done" messages - should include the time.
-  if (message.content.startsWith('.done') && message.channel.name === 'weekly-seed') {
+  if (/^\.(done|forfeit)/.test(message.content) && message.channel.name === 'weekly-seed') {
     handleDone(message);
   }
   // what else to handle?
